@@ -40,6 +40,43 @@ require("yatline"):setup({
 })
 ```
 
+Nix users:
+
+```nix
+# inputs.nord.url = "github:stepbrobd/nord.yazi";
+
+{ inputs, pkgs, ... }:
+
+let
+  # required in both `plugins` (reads `main.lua`)
+  # and
+  # `flavors` (reads `flavor.toml`)
+  nord = inputs.nord.packages.${pkgs.stdenv.system}.default;
+in
+{
+  programs.yazi = {
+    enable = true;
+
+    plugins = with pkgs.yaziPlugins; {
+      inherit nord yatline;
+    };
+
+    flavors = { inherit nord; };
+
+    theme.flavor = {
+      light = "nord";
+      dark = "nord";
+    };
+
+    initLua = /* lua */ ''
+      require("yatline"):setup({
+        theme = require("nord"):setup(),
+      })
+    '';
+  };
+}
+```
+
 ## License
 
 The flavor is MIT-licensed. Check the [LICENSE](LICENSE) for more details.
