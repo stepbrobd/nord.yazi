@@ -28,6 +28,7 @@
       };
 
       formatter = pkgs.writeShellScriptBin "formatter" ''
+        ${lib.getExe pkgs.deno} fmt readme.md
         ${lib.getExe pkgs.nixpkgs-fmt} .
         ${lib.getExe pkgs.stylua} main.lua
         ${lib.getExe pkgs.taplo} format flavor.toml

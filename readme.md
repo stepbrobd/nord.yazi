@@ -40,19 +40,11 @@ require("yatline"):setup({
 })
 ```
 
-Nix users:
+Nix users (use
+[`yaziPlugins.nord`](https://search.nixos.org/packages?channel=unstable&show=yaziPlugins.nord&from=0&size=50&sort=relevance&type=packages)
+with [home-manager](https://github.com/nix-community/home-manager)):
 
 ```nix
-# inputs.nord.url = "github:stepbrobd/nord.yazi";
-
-{ inputs, pkgs, ... }:
-
-let
-  # required in both `plugins` (reads `main.lua`)
-  # and
-  # `flavors` (reads `flavor.toml`)
-  nord = inputs.nord.packages.${pkgs.stdenv.system}.default;
-in
 {
   programs.yazi = {
     enable = true;
@@ -61,7 +53,7 @@ in
       inherit nord yatline;
     };
 
-    flavors = { inherit nord; };
+    flavors = { inherit (pkgs.yaziPlugins) nord; };
 
     theme.flavor = {
       light = "nord";
